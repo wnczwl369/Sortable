@@ -352,6 +352,7 @@
 				_on(ownerDocument, 'touchend', _this._onDrop);
 				_on(ownerDocument, 'touchcancel', _this._onDrop);
 
+				options.delay = 400;
 				if (options.delay) {
 					// If the user moves the pointer or let go the click or touch
 					// before the delay has been reached:
