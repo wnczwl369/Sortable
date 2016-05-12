@@ -4,6 +4,11 @@
  * @license MIT
  */
 
+ /*
+ 	* Note: _onTouchMove is customized for CM project by Leo.
+ 	*
+ 	*/
+
 
 (function (factory) {
 	"use strict";
@@ -464,26 +469,34 @@
 
 		_onTouchMove: function (/**TouchEvent*/evt) {
 			if (tapEvt) {
-				// only set the status to dragging, when we are actually dragging
-				if (!Sortable.active) {
-					this._dragStarted();
-				}
-
-				// as well as creating the ghost element on the document body
-				this._appendGhost();
-
 				var touch = evt.touches ? evt.touches[0] : evt,
-					dx = touch.clientX - tapEvt.clientX,
-					dy = touch.clientY - tapEvt.clientY,
-					translate3d = evt.touches ? 'translate3d(' + dx + 'px,' + dy + 'px,0)' : 'translate(' + dx + 'px,' + dy + 'px)';
+						dx = touch.clientX - tapEvt.clientX,
+						dy = touch.clientY - tapEvt.clientY;
+				if ( Math.abs( dy ) > ( Math.abs( dx ) + 10 ) ) {
+					// only set the status to dragging, when we are actually dragging
+					if (!Sortable.active) {
+						this._dragStarted();
+					}
 
-				moved = true;
-				touchEvt = touch;
+					// as well as creating the ghost element on the document body
+					this._appendGhost();
 
-				_css(ghostEl, 'webkitTransform', translate3d);
-				_css(ghostEl, 'mozTransform', translate3d);
-				_css(ghostEl, 'msTransform', translate3d);
-				_css(ghostEl, 'transform', translate3d);
+					// var touch = evt.touches ? evt.touches[0] : evt,
+					// 	dx = touch.clientX - tapEvt.clientX,
+					// 	dy = touch.clientY - tapEvt.clientY,
+					var	translate3d = evt.touches ? 'translate3d(' + dx + 'px,' + dy + 'px,0)' : 'translate(' + dx + 'px,' + dy + 'px)';
+
+					moved = true;
+					touchEvt = touch;
+
+					_css(ghostEl, 'webkitTransform', translate3d);
+					_css(ghostEl, 'mozTransform', translate3d);
+					_css(ghostEl, 'msTransform', translate3d);
+					_css(ghostEl, 'transform', translate3d);
+				} else {
+					dragEl.draggable = false;
+				}
+				
 
 				evt.preventDefault();
 			}
